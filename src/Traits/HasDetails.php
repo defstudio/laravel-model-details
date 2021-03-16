@@ -9,6 +9,7 @@ namespace DefStudio\ModelDetails\Traits;
 
 
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 
 trait HasDetails
 {
@@ -39,6 +40,12 @@ trait HasDetails
     public function get_detail(string|array $key, mixed $default = null): mixed
     {
         return data_get($this->getAttribute('details'), $key, $default);
+    }
+
+    public function has_detail(string|array $key): bool
+    {
+        $dummy_value = Str::uuid();
+        return !(data_get($this->getAttribute('details'), $key, $dummy_value) === $dummy_value);
     }
 
     public function forget_detail(string $key): static
