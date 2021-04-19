@@ -5,14 +5,26 @@
  *  Authors: Fabio Ivona <fabio.ivona@defstudio.it> & Daniele Romeo <danieleromeo@defstudio.it>
  */
 
+/** @noinspection PhpMultipleClassDeclarationsInspection */
+
 namespace DefStudio\ModelDetails\Traits;
 
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 trait HasDetails
 {
+    public function bootHasDetails()
+    {
+        self::creating(function (HasDetails|Model $model) {
+            if (empty($model->details)) {
+                $model->details = [];
+            }
+        });
+    }
+
     public function set_details(array $details, bool $merge = false): static
     {
         if ($merge) {
@@ -20,7 +32,6 @@ trait HasDetails
             $details = array_replace_recursive($old_details, $details);
         }
 
-        /** @noinspection PhpUndefinedClassInspection */
         parent::setAttribute('details', $details);
 
         return $this;
@@ -31,7 +42,6 @@ trait HasDetails
         $details = $this->details;
         data_set($details, $key, $value);
 
-        /** @noinspection PhpUndefinedClassInspection */
         parent::setAttribute('details', $details);
 
         return $this;
@@ -53,7 +63,6 @@ trait HasDetails
         $details = $this->details;
         Arr::forget($details, $key);
 
-        /** @noinspection PhpUndefinedClassInspection */
         parent::setAttribute('details', $details);
 
         return $this;
