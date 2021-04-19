@@ -16,7 +16,7 @@ use Illuminate\Support\Str;
 
 trait HasDetails
 {
-    public function bootHasDetails()
+    public static function bootHasDetails()
     {
         self::creating(function (HasDetails|Model $model) {
             if (empty($model->details)) {
