@@ -6,10 +6,12 @@
  */
 
 /** @noinspection PhpMultipleClassDeclarationsInspection */
+/** @noinspection PhpUnhandledExceptionInspection */
 
 namespace DefStudio\ModelDetails\Traits;
 
 
+use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
@@ -33,6 +35,25 @@ trait HasDetails
         }
 
         parent::setAttribute('details', $details);
+
+        return $this;
+    }
+
+    public function append_detail(string $key, mixed $value): static
+    {
+        $array = $this->get_detail($key);
+
+        if (empty($array)) {
+            $array = [];
+        }
+
+        if (!is_array($array)) {
+            throw new Exception("Trying to append a detail to a non array key");
+        }
+
+        $array[] = $value;
+
+        $this->set_detail($key, $array);
 
         return $this;
     }
