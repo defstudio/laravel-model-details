@@ -58,8 +58,12 @@ trait HasDetails
         return $this;
     }
 
-    public function set_detail(string $key, mixed $value): static
+    public function set_detail(string $key, mixed $value, bool $overwrite = true): static
     {
+        if (!empty($this->get_detail($key)) && !$overwrite) {
+            return $this;
+        }
+
         $details = $this->details;
         data_set($details, $key, $value);
 
