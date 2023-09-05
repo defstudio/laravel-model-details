@@ -12,6 +12,7 @@ namespace DefStudio\ModelDetails\Traits;
 
 
 use Exception;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
@@ -91,5 +92,13 @@ trait HasDetails
         parent::setAttribute('details', $details);
 
         return $this;
+    }
+
+    public function jsonDetails(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => json_encode(json_decode($this->attributes['details'] ?? '{}'), JSON_PRETTY_PRINT),
+            set: fn (string $value) => ['details' => json_encode(json_decode($value,JSON_PRETTY_PRINT))],
+        );
     }
 }
